@@ -55,7 +55,7 @@ public class RecommendationsActivity extends AppCompatActivity {
         Client.getPreferedLocation(new ApiCallback<List<LocationDTO>>() {
             @Override
             public void onFailure(ApiException e, int i, Map<String, List<String>> map) {
-
+                e.printStackTrace();
             }
 
             @Override

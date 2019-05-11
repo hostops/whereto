@@ -42,7 +42,7 @@ public class Client {
                 }
                 return null;
             }
-        };
+        }.execute("");
     }
 
     public static void getPreferedGroupLocation(final ApiCallback<List<LocationDTO>> callback, final int count) {
