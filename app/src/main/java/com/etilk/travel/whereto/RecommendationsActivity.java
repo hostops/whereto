@@ -38,10 +38,40 @@ public class RecommendationsActivity extends AppCompatActivity {
         btnMergeFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mergeFriend();
+                mergeFriends();
             }
         });
     }
+
+    public void mergeFriends() {
+        Client.getPreferedGroupLocation(new ApiCallback<List<LocationDTO>>() {
+            @Override
+            public void onFailure(ApiException e, int i, Map<String, List<String>> map) {
+
+            }
+
+            @Override
+            public void onSuccess(List<LocationDTO> locationDTOS, int i, Map<String, List<String>> map) {
+                String url = "https://www.kiwi.com/us/search?nomad=--~~--%3B---~---~--%3B";
+                for(LocationDTO location : locationDTOS) {
+                    url+=location.getKiwiId() + "~-~--%3B";
+                }
+                url+="-~-~--";
+                startIntent(url);
+            }
+
+            @Override
+            public void onUploadProgress(long l, long l1, boolean b) {
+
+            }
+
+            @Override
+            public void onDownloadProgress(long l, long l1, boolean b) {
+
+            }
+        }, 5);
+    }
+
 
     private void startIntent(String url) {
         Intent i = new Intent(this, KiwiActivity.class);

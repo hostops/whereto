@@ -62,7 +62,10 @@ public class Client {
                     // Get user details
                     UserDetailsResourceApi userDetailsResourceApi = new UserDetailsResourceApi(authenticatedApiClient);
                     UserDetailsDTO userDetails = userDetailsResourceApi.getUserDetailsByUserUsingGET(username);
-                    List<InteresDTO> interests = userDetails.getInterests();
+
+                    InteresResourceApi interesResourceApi = new InteresResourceApi(Client.authenticatedApiClient);
+                    List<InteresDTO> interests = interesResourceApi.getAllInteresByUserIdUsingGET(Client.user.getId(), 0, 10000, new ArrayList<String>());
+
                     List<InteresDTO> mergedInterests = mergeInterests(interests, userDetails.getFriends());
                     List<LocationDTO> bestLocations = findBestLocation(mergedInterests, locations, count);
                     callback.onSuccess(bestLocations, 200, new HashMap<String, List<String>>());
@@ -72,23 +75,34 @@ public class Client {
                 }
                 return null;
             }
-        };
+        }.execute("");
     }
 
     private static List<InteresDTO> mergeInterests(List<InteresDTO> interests, List<UserDetailsDTO> friends) {
         List<InteresDTO> summedInterests = new ArrayList<>(interests);
-        for (UserDetailsDTO friend : friends) {
-            for (InteresDTO friendsInterest : friend.getInterests()) {
-                String tagName = friendsInterest.getTagName();
-                for (InteresDTO sumInterest : summedInterests) {
-                    if (sumInterest.getTagName().equals(tagName)) {
-                        sumInterest.setValue(sumInterest.getValue() + friendsInterest.getValue());
-                        break;
+
+        try {
+            for (UserDetailsDTO friend : friends) {
+                InteresResourceApi interesResourceApi = new InteresResourceApi(Client.authenticatedApiClient);
+                List<InteresDTO> finterests = null;
+
+                    finterests = interesResourceApi.getAllInteresByUserIdUsingGET(friend.getId(), 0, 10000, new ArrayList<String>());
+
+                for (InteresDTO friendsInterest : finterests) {
+                    String tagName = friendsInterest.getTagName();
+                    for (InteresDTO sumInterest : summedInterests) {
+                        if (sumInterest.getTagName().equals(tagName)) {
+                            sumInterest.setValue(sumInterest.getValue() + friendsInterest.getValue());
+                            break;
+                        }
                     }
                 }
             }
+        } catch (ApiException e) {
+            e.printStackTrace();
         }
         return summedInterests;
+
     }
 
     private static List<LocationDTO> findBestLocation(List<InteresDTO> interests, List<LocationDTO> locations, int count) {
