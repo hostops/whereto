@@ -16,7 +16,7 @@ import java.util.Map;
 import io.swagger.client.ApiCallback;
 import io.swagger.client.ApiException;
 import io.swagger.client.api.DisplayResourceApi;
-import io.swagger.client.api.UserDetailsResourceApi;
+import io.swagger.client.api.InteresResourceApi;
 import io.swagger.client.model.DisplayDTO;
 import io.swagger.client.model.InteresDTO;
 import io.swagger.client.model.TagDTO;
@@ -85,7 +85,7 @@ public class DisplayActivity extends AppCompatActivity {
     public void getLocations(Integer i) {
         DisplayResourceApi displayResourceApi = new DisplayResourceApi(Client.authenticatedApiClient);
         try {
-            displayResourceApi.getAllDisplaysUsingGETAsync(true, i, 1, new ArrayList<String>(),new ApiCallback<List<DisplayDTO>>() {
+            displayResourceApi.getAllDisplaysUsingGETAsync(true, i, 1, new ArrayList<String>(), new ApiCallback<List<DisplayDTO>>() {
 
                 @Override
                 public void onFailure(ApiException e, int i, Map<String, List<String>> map) {
@@ -119,20 +119,92 @@ public class DisplayActivity extends AppCompatActivity {
     }
 
     public void saveUser(final List<TagDTO> tagDTOS) {
-        UserDetailsResourceApi displayResourceApi = new UserDetailsResourceApi(Client.authenticatedApiClient);
-        try {
-            increaseTags(Client.getUser(), tagDTOS);
-            displayResourceApi.updateUserDetailsUsingPUTAsync(Client.getUser(), new ApiCallback<UserDetailsDTO>() {
+        increaseTags(Client.getUser(), tagDTOS);
+    }
 
+    private void increaseTags(UserDetailsDTO userDetailsDTO, final List<TagDTO> tagDTOS) {
+        try {
+            InteresResourceApi interesResourceApi1 = new InteresResourceApi(Client.authenticatedApiClient);
+            interesResourceApi1.getAllInteresByUserIdUsingGETAsync(Client.getUser().getId(), 0, 10000, new ArrayList<String>(), new ApiCallback<List<InteresDTO>>() {
                 @Override
                 public void onFailure(ApiException e, int i, Map<String, List<String>> map) {
-                    e.printStackTrace();
+
                 }
 
-
                 @Override
-                public void onSuccess(UserDetailsDTO userDetailsDTO, int i, Map<String, List<String>> map) {
+                public void onSuccess(List<InteresDTO> interesDTOS, int i, Map<String, List<String>> map) {
 
+                    for (TagDTO tagDTO : tagDTOS) {
+                        Boolean interestFound = false;
+                        for (InteresDTO interesDTO : interesDTOS) {
+                            if (interesDTO.getTagName().equals(tagDTO.getName())) {
+                                interesDTO.setValue(interesDTO.getValue() + 1);
+                                interestFound = true;
+                                InteresResourceApi interesResourceApi = new InteresResourceApi(Client.authenticatedApiClient);
+                                try {
+                                    interesResourceApi.updateInteresUsingPUTAsync(interesDTO, new ApiCallback<InteresDTO>() {
+                                        @Override
+                                        public void onFailure(ApiException e, int i, Map<String, List<String>> map) {
+
+                                        }
+
+                                        @Override
+                                        public void onSuccess(InteresDTO interesDTO, int i, Map<String, List<String>> map) {
+
+                                        }
+
+                                        @Override
+                                        public void onUploadProgress(long l, long l1, boolean b) {
+
+                                        }
+
+                                        @Override
+                                        public void onDownloadProgress(long l, long l1, boolean b) {
+
+                                        }
+                                    });
+                                } catch (ApiException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        if (!interestFound) {
+                            //todo: check
+                            InteresDTO newInteres = new InteresDTO();
+                            newInteres.setValue(1);
+                            newInteres.setTagId(tagDTO.getId());
+                            newInteres.setUserId(Client.getUser().getId());
+                            newInteres.setUserName(Client.getUser().getName());
+                            newInteres.setTagName(tagDTO.getName());
+                            InteresResourceApi interesResourceApi = new InteresResourceApi(Client.authenticatedApiClient);
+                            try {
+                                interesResourceApi.createInteresUsingPOSTAsync(newInteres, new ApiCallback<InteresDTO>() {
+                                    @Override
+                                    public void onFailure(ApiException e, int i, Map<String, List<String>> map) {
+
+                                    }
+
+                                    @Override
+                                    public void onSuccess(InteresDTO interesDTO, int i, Map<String, List<String>> map) {
+
+                                    }
+
+                                    @Override
+                                    public void onUploadProgress(long l, long l1, boolean b) {
+
+                                    }
+
+                                    @Override
+                                    public void onDownloadProgress(long l, long l1, boolean b) {
+
+                                    }
+                                });
+                            } catch (ApiException e) {
+                                e.printStackTrace();
+                            }
+                            Client.getUser().getInterests().add(newInteres);
+                        }
+                    }
                 }
 
                 @Override
@@ -147,26 +219,6 @@ public class DisplayActivity extends AppCompatActivity {
             });
         } catch (ApiException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void increaseTags(UserDetailsDTO userDetailsDTO, final List<TagDTO> tagDTOS) {
-        for (TagDTO tagDTO : tagDTOS) {
-            Boolean interestFound = false;
-            for (InteresDTO interesDTO : userDetailsDTO.getInterests()) {
-                if (interesDTO.getTagName().equals(tagDTO.getName())) {
-                    interesDTO.setValue(interesDTO.getValue() + 1);
-                    interestFound = true;
-                }
-            }
-            if (!interestFound) {
-                //todo: check
-                InteresDTO newInteres = new InteresDTO();
-                newInteres.setValue(1);
-                newInteres.setTagName(tagDTO.getName());
-
-                userDetailsDTO.getInterests().add(newInteres);
-            }
         }
     }
 
