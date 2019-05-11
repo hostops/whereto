@@ -64,9 +64,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        //todo: GIVE USERNAME TO CLIENT
+        Client.username = user;
 
         Intent returnIntent = new Intent();
+        returnIntent.putExtra("logged", true);
         setResult(Activity.RESULT_OK,returnIntent);
         finish();
     }
