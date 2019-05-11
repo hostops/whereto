@@ -8,8 +8,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainPageAdapter extends FragmentPagerAdapter {
+import io.swagger.client.model.LocationDTO;
 
+public class MainPageAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> fragments = new ArrayList<>();
 
