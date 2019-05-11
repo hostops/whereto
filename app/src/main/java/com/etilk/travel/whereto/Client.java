@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import io.swagger.client.ApiCallback;
@@ -20,7 +21,7 @@ public class Client {
     public static ApiClient authenticatedApiClient;
     public static String username;
 
-    public static void getPreferedLocation(final ApiCallback<LocationDTO> callback) {
+    public static void getPreferedLocation(final ApiCallback<List<LocationDTO>> callback, final int count) {
         AsyncTask asyncTask = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
@@ -32,8 +33,8 @@ public class Client {
                     UserDetailsResourceApi userDetailsResourceApi = new UserDetailsResourceApi(authenticatedApiClient);
                     UserDetailsDTO userDetails = userDetailsResourceApi.getUserDetailsByUserUsingGET(username);
                     List<InteresDTO> interests = userDetails.getInterests();
-                    LocationDTO bestLocation = findBestLocation(interests, locations);
-                    callback.onSuccess(bestLocation, 200, new HashMap<String, List<String>>());
+                    List<LocationDTO> bestLocations = findBestLocation(interests, locations, count);
+                    callback.onSuccess(bestLocations, 200, new HashMap<String, List<String>>());
 
                 } catch (ApiException e) {
                     e.printStackTrace();
@@ -43,7 +44,7 @@ public class Client {
         };
     }
 
-    public static void getPreferedGroupLocation(final ApiCallback<LocationDTO> callback) {
+    public static void getPreferedGroupLocation(final ApiCallback<List<LocationDTO>> callback, final int count) {
         AsyncTask asyncTask = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
@@ -56,8 +57,8 @@ public class Client {
                     UserDetailsDTO userDetails = userDetailsResourceApi.getUserDetailsByUserUsingGET(username);
                     List<InteresDTO> interests = userDetails.getInterests();
                     List<InteresDTO> mergedInterests = mergeInterests(interests, userDetails.getFriends());
-                    LocationDTO bestLocation = findBestLocation(mergedInterests, locations);
-                    callback.onSuccess(bestLocation, 200, new HashMap<String, List<String>>());
+                    List<LocationDTO> bestLocations = findBestLocation(mergedInterests, locations, count);
+                    callback.onSuccess(bestLocations, 200, new HashMap<String, List<String>>());
 
                 } catch (ApiException e) {
                     e.printStackTrace();
@@ -80,25 +81,31 @@ public class Client {
                 }
             }
         }
-
-        return null;
+        return summedInterests;
     }
 
-    private static LocationDTO findBestLocation(List<InteresDTO> interests, List<LocationDTO> locations) {
-        LocationDTO bestLocation = locations.get(0);
-        int sum = 0;
-        for (InteresDTO interest : interests) {
-            sum += interest.getValue();
-        }
-        double bestDistance = distance(bestLocation, interests, sum);
-        for (LocationDTO location : locations) {
-            double currentDistance = distance(location, interests, sum);
-            if (currentDistance < bestDistance) {
-                bestDistance = currentDistance;
-                bestLocation = location;
+    private static List<LocationDTO> findBestLocation(List<InteresDTO> interests, List<LocationDTO> locations, int count) {
+        List<LocationDTO> bestLocations = new LinkedList<>();
+        while (count > 0) {
+            LocationDTO bestLocation = locations.get(0);
+            int sum = 0;
+            for (InteresDTO interest : interests) {
+                sum += interest.getValue();
             }
+            double bestDistance = distance(bestLocation, interests, sum);
+            for (LocationDTO location : locations) {
+                double currentDistance = distance(location, interests, sum);
+                if (currentDistance < bestDistance) {
+                    bestDistance = currentDistance;
+                    bestLocation = location;
+                }
+            }
+            bestLocations.add(bestLocation);
+            locations.remove(bestLocation);
+            count--;
         }
-        return bestLocation;
+        locations.addAll(bestLocations);
+        return bestLocations;
     }
 
     private static double distance(LocationDTO location, List<InteresDTO> interests, double sum) {
