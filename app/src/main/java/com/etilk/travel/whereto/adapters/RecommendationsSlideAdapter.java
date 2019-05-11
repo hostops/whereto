@@ -1,11 +1,15 @@
 package com.etilk.travel.whereto.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,50 +21,34 @@ import java.util.List;
 
 import io.swagger.client.model.LocationDTO;
 
-public class RecommendationsSlideAdapter extends PagerAdapter {
+public class RecommendationsSlideAdapter extends ArrayAdapter<LocationDTO> {
 
-    List<LocationDTO> locationDTOS;
 
-    Context context;
-    LayoutInflater layoutInflater;
 
     public RecommendationsSlideAdapter(Context context, List<LocationDTO> locationDTOS) {
-        this.context = context;
-        this.locationDTOS = locationDTOS;
+        super(context,0,locationDTOS);
     }
 
     @Override
-    public int getCount() {
-        return 0;
-    }
+    public View getView(int position, View convertView, ViewGroup parent) {
+        // Get the data item for this position
+        LocationDTO locationDTO = getItem(position);
+        // Check if an existing view is being reused, otherwise inflate the view
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.layout_location, parent, false);
+        }
 
-    @NonNull
-    @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        ImageView destinationImageView = convertView.findViewById(R.id.destinationImageView);
+        Button btnNext = convertView.findViewById(R.id.btnNext);
+        TextView imageDescriptionView = convertView.findViewById(R.id.imageDescriptionView);
 
-        layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.layout_location, container, false);
-
-        LocationDTO locationDTO = locationDTOS.get(position);
-
-        ImageView destinationImageView = view.findViewById(R.id.destinationImageView);
-        Button btnNext = view.findViewById(R.id.btnNext);
-        TextView imageDescriptionView = view.findViewById(R.id.imageDescriptionView);
+        byte[] decodedString = Base64.decode(locationDTO.getImage(), Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
         imageDescriptionView.setText(locationDTO.getName());
-
-        return view;
+        destinationImageView.setImageBitmap(decodedByte);;
+        // Return the completed view to render on screen
+        return convertView;
     }
-
-    @Override
-    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((RelativeLayout)object);
-    }
-
-    @Override
-    public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
-        return view == (RelativeLayout) o;
-    }
-
 
 }
