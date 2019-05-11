@@ -35,7 +35,7 @@
         app:layout_constraintStart_toEndOf="@+id/usersScrollView"
         app:layout_constraintTop_toTopOf="@+id/usersScrollView" />
 
-    <ScrollView
+    <ListView
         android:id="@+id/recommendationsScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -52,6 +52,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
-    </ScrollView>
+    </ListView>
 
 </android.support.constraint.ConstraintLayout>
