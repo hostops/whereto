@@ -1,4 +1,4 @@
-package com.etilk.travel.whereto;
+package com.etilk.travel.whereto.adapters;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainPageAdapter extends FragmentPagerAdapter {
-
 
     private List<Fragment> fragments = new ArrayList<>();
 

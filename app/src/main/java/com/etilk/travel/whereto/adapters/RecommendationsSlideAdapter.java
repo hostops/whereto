@@ -1,4 +1,4 @@
-package com.etilk.travel.whereto;
+package com.etilk.travel.whereto.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -6,18 +6,27 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.etilk.travel.whereto.R;
 
 import java.util.List;
 
-public class ImageSlideAdapter extends PagerAdapter {
+import io.swagger.client.model.LocationDTO;
+
+public class RecommendationsSlideAdapter extends PagerAdapter {
+
+    List<LocationDTO> locationDTOS;
 
     Context context;
     LayoutInflater layoutInflater;
 
-    public ImageSlideAdapter(Context context) {
+    public RecommendationsSlideAdapter(Context context, List<LocationDTO> locationDTOS) {
         this.context = context;
+        this.locationDTOS = locationDTOS;
     }
 
     @Override
@@ -30,9 +39,15 @@ public class ImageSlideAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
         layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.recomendation_layout, container, false);
+        View view = layoutInflater.inflate(R.layout.layout_location, container, false);
 
-        ImageView destinationImageView = (ImageView) view.findViewById(R.id.destinationImageView);
+        LocationDTO locationDTO = locationDTOS.get(position);
+
+        ImageView destinationImageView = view.findViewById(R.id.destinationImageView);
+        Button btnNext = view.findViewById(R.id.btnNext);
+        TextView imageDescriptionView = view.findViewById(R.id.imageDescriptionView);
+
+        imageDescriptionView.setText(locationDTO.getName());
 
         return view;
     }

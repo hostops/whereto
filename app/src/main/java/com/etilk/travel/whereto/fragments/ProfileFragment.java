@@ -1,4 +1,4 @@
-package com.etilk.travel.whereto.Fragments;
+package com.etilk.travel.whereto.fragments;
 
 import android.content.Context;
 import android.net.Uri;

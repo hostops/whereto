@@ -1,15 +1,12 @@
-package com.etilk.travel.whereto.Fragments;
+package com.etilk.travel.whereto.fragments;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import com.etilk.travel.whereto.R;
 
@@ -17,12 +14,12 @@ import com.etilk.travel.whereto.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link DisplaysFragment.OnFragmentInteractionListener} interface
+ * {@link RecomendationsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link DisplaysFragment#newInstance} factory method to
+ * Use the {@link RecomendationsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DisplaysFragment extends Fragment {
+public class RecomendationsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,52 +31,8 @@ public class DisplaysFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public DisplaysFragment() {
+    public RecomendationsFragment() {
         // Required empty public constructor
-    }
-
-    ImageView displayImageView;
-    Button btnLike;
-    Button btnDislike;
-
-    private void initViews() {
-        displayImageView = getView().findViewById(R.id.displayImageView);
-        btnLike = getView().findViewById(R.id.btnLike);
-        btnDislike = getView().findViewById(R.id.btnDislike);
-    }
-
-    private void initListeners() {
-        btnLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                liked();
-            }
-        });
-
-        btnDislike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                disliked();
-            }
-        });
-    }
-
-    private void newDisplay(Drawable drawable) {
-        displayImageView.setImageDrawable(drawable);
-    }
-
-
-    public void requestDisplay() {
-
-    }
-
-    public void liked() {
-
-    }
-
-
-    public void disliked() {
-
     }
 
     /**
@@ -88,11 +41,11 @@ public class DisplaysFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment DisplaysFragment.
+     * @return A new instance of fragment RecomendationsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DisplaysFragment newInstance(String param1, String param2) {
-        DisplaysFragment fragment = new DisplaysFragment();
+    public static RecomendationsFragment newInstance(String param1, String param2) {
+        RecomendationsFragment fragment = new RecomendationsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -113,7 +66,7 @@ public class DisplaysFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_displays, container, false);
+        return inflater.inflate(R.layout.fragment_recomendations, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
