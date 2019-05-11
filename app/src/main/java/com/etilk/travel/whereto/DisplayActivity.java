@@ -16,11 +16,9 @@ import java.util.Map;
 import io.swagger.client.ApiCallback;
 import io.swagger.client.ApiException;
 import io.swagger.client.api.DisplayResourceApi;
-import io.swagger.client.api.LocationResourceApi;
 import io.swagger.client.api.UserDetailsResourceApi;
 import io.swagger.client.model.DisplayDTO;
 import io.swagger.client.model.InteresDTO;
-import io.swagger.client.model.LocationDTO;
 import io.swagger.client.model.TagDTO;
 import io.swagger.client.model.UserDetailsDTO;
 
@@ -67,6 +65,7 @@ public class DisplayActivity extends AppCompatActivity {
         btnDislike.setEnabled(false);
         btnLike.setEnabled(false);
         count++;
+        saveUser(displayDTO.getTags());
         getLocations(count);
     }
 
@@ -119,41 +118,11 @@ public class DisplayActivity extends AppCompatActivity {
         }
     }
 
-    public void getUser(final List<TagDTO> tagDTOS) {
-        UserDetailsResourceApi displayResourceApi = new UserDetailsResourceApi(Client.authenticatedApiClient);
-        try {
-            displayResourceApi.getUserDetailsByUserUsingGETAsync(Client.username, new ApiCallback<UserDetailsDTO>() {
-
-                @Override
-                public void onFailure(ApiException e, int i, Map<String, List<String>> map) {
-                    e.printStackTrace();
-                }
-
-                @Override
-                public void onSuccess(final UserDetailsDTO userDetailsDTO, int i, Map<String, List<String>> map) {
-                   increaseTags(userDetailsDTO, tagDTOS);
-                }
-
-
-                @Override
-                public void onUploadProgress(long l, long l1, boolean b) {
-
-                }
-
-                @Override
-                public void onDownloadProgress(long l, long l1, boolean b) {
-
-                }
-            });
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void saveUser(final List<TagDTO> tagDTOS) {
         UserDetailsResourceApi displayResourceApi = new UserDetailsResourceApi(Client.authenticatedApiClient);
         try {
-            displayResourceApi.updateUserDetailsUsingPUTAsync(Client.username, new ApiCallback<UserDetailsDTO>() {
+            increaseTags(Client.getUser(), tagDTOS);
+            displayResourceApi.updateUserDetailsUsingPUTAsync(Client.getUser(), new ApiCallback<UserDetailsDTO>() {
 
                 @Override
                 public void onFailure(ApiException e, int i, Map<String, List<String>> map) {
@@ -161,6 +130,10 @@ public class DisplayActivity extends AppCompatActivity {
                 }
 
 
+                @Override
+                public void onSuccess(UserDetailsDTO userDetailsDTO, int i, Map<String, List<String>> map) {
+
+                }
 
                 @Override
                 public void onUploadProgress(long l, long l1, boolean b) {
@@ -185,14 +158,14 @@ public class DisplayActivity extends AppCompatActivity {
                     interesDTO.setValue(interesDTO.getValue() + 1);
                     interestFound = true;
                 }
-                if (!interestFound) {
-                    //todo: check
-                    InteresDTO newInteres = new InteresDTO();
-                    newInteres.setValue(1);
-                    newInteres.setTagName(tagDTO.getName());
+            }
+            if (!interestFound) {
+                //todo: check
+                InteresDTO newInteres = new InteresDTO();
+                newInteres.setValue(1);
+                newInteres.setTagName(tagDTO.getName());
 
-                    userDetailsDTO.getInterests().add(newInteres);
-                }
+                userDetailsDTO.getInterests().add(newInteres);
             }
         }
     }

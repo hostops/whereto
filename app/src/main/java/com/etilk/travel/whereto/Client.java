@@ -20,6 +20,7 @@ import io.swagger.client.model.UserDetailsDTO;
 public class Client {
     public static ApiClient authenticatedApiClient;
     public static String username;
+    private static UserDetailsDTO user;
 
     public static void getPreferedLocation(final ApiCallback<List<LocationDTO>> callback, final int count) {
         AsyncTask asyncTask = new AsyncTask() {
@@ -127,5 +128,13 @@ public class Client {
             }
         }
         return distance;
+    }
+
+    public static UserDetailsDTO getUser() {
+        return user;
+    }
+
+    public static void setUser(UserDetailsDTO user) {
+        Client.user = user;
     }
 }
