@@ -10,6 +10,7 @@ import java.util.List;
 import io.swagger.client.ApiCallback;
 import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
+import io.swagger.client.api.InteresResourceApi;
 import io.swagger.client.api.LocationResourceApi;
 import io.swagger.client.api.UserDetailsResourceApi;
 import io.swagger.client.model.InteresDTO;
@@ -22,8 +23,10 @@ public class Client {
     public static String username;
     private static UserDetailsDTO user;
 
+    @SuppressWarnings("unchecked")
     public static void getPreferedLocation(final ApiCallback<List<LocationDTO>> callback, final int count) {
         AsyncTask asyncTask = new AsyncTask() {
+
             @Override
             protected Object doInBackground(Object[] objects) {
                 try {
@@ -33,7 +36,10 @@ public class Client {
                     // Get user details
                     UserDetailsResourceApi userDetailsResourceApi = new UserDetailsResourceApi(authenticatedApiClient);
                     UserDetailsDTO userDetails = userDetailsResourceApi.getUserDetailsByUserUsingGET(username);
-                    List<InteresDTO> interests = userDetails.getInterests();
+
+                    InteresResourceApi interesResourceApi = new InteresResourceApi(Client.authenticatedApiClient);
+                    List<InteresDTO> interests = interesResourceApi.getAllInteresByUserIdUsingGET(Client.user.getId(), 0, 10000, new ArrayList<String>());
+
                     List<LocationDTO> bestLocations = findBestLocation(interests, locations, count);
                     callback.onSuccess(bestLocations, 200, new HashMap<String, List<String>>());
 
