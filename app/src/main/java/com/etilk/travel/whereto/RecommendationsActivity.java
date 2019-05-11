@@ -1,8 +1,10 @@
 package com.etilk.travel.whereto;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
@@ -39,6 +41,12 @@ public class RecommendationsActivity extends AppCompatActivity {
                 mergeFriend();
             }
         });
+    }
+
+    private void startIntent(String url) {
+        Intent i = new Intent(this, KiwiActivity.class);
+        i.putExtra("url", url);
+        startActivity(i);
     }
 
     private void mergeFriend() {
@@ -81,7 +89,17 @@ public class RecommendationsActivity extends AppCompatActivity {
     }
 
     private void setAdapters(List<LocationDTO> locationDTOS) {
-        RecommendationsSlideAdapter recommendationsSlideAdapter = new RecommendationsSlideAdapter(this, locationDTOS);
+        RecommendationsSlideAdapter recommendationsSlideAdapter = new RecommendationsSlideAdapter(this, locationDTOS) {
+            @Override
+            public void checked(LocationDTO locationDTO) {
+                String url = "https://www.kiwi.com/us/search?nomad=--~~--%3B---~---~--%3B";
+                url+=locationDTO.getKiwiId() + "~-~--%3B";
+                url+="-~-~--";
+
+                startIntent(url);
+            }
+        };
         recommendationsScrollView.setAdapter(recommendationsSlideAdapter);
+
     }
 }

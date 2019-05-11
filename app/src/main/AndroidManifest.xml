@@ -2,8 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.etilk.travel.whereto">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".KiwiActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,9 +21,9 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".FriendsActivity" />
-        <activity android:name=".IncludeFriendActivity"/>
+        <activity android:name=".IncludeFriendActivity" />
         <activity android:name=".DisplayActivity" />
-        <activity android:name=".RecommendationsActivity"></activity>
+        <activity android:name=".RecommendationsActivity" />
     </application>
 
 </manifest>
