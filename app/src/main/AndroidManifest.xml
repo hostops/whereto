@@ -18,7 +18,9 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".FriendsActivity" />
-        <activity android:name=".IncludeFriendActivity"></activity>
+        <activity android:name=".IncludeFriendActivity"/>
+        <activity android:name=".DisplayActivity" />
+        <activity android:name=".RecommendationsActivity"></activity>
     </application>
 
 </manifest>

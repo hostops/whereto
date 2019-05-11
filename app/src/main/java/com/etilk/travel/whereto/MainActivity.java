@@ -1,24 +1,72 @@
 package com.etilk.travel.whereto;
 
-import android.net.Uri;
-import android.support.v4.view.ViewPager;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.etilk.travel.whereto.adapters.MainPageAdapter;
-import com.etilk.travel.whereto.fragments.DisplaysFragment;
-import com.etilk.travel.whereto.fragments.ProfileFragment;
-import com.etilk.travel.whereto.fragments.RecomendationsFragment;
+public class MainActivity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity implements DisplaysFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener, RecomendationsFragment.OnFragmentInteractionListener {
+    Button btnFriends;
+    Button btnSettings;
+    Button btnLogout;
+    Button btnStart;
+    Button btnDestinations;
 
-    ViewPager mainViewPager;
+    ImageView profileImageView;
+    TextView loginTextView;
 
     private void initViews() {
-        mainViewPager = findViewById(R.id.mainViewPager);
+        btnFriends = findViewById(R.id.btnFriends);
+        btnSettings = findViewById(R.id.btnSettings);
+        btnLogout = findViewById(R.id.btnLogout);
+        btnDestinations = findViewById(R.id.btnDestinations);
+        btnStart = findViewById(R.id.btnStart);
+        profileImageView = findViewById(R.id.profileImageView);
+        loginTextView = findViewById(R.id.loginTextView);
     }
 
     private void initListeners() {
+        btnFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        btnDestinations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnDestinations();
+            }
+        });
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnStart();
+            }
+        });
+    }
+
+    private void btnStart() {
+        Intent i = new Intent(this, DisplayActivity.class);
+        startActivity(i);
+    }
+
+    private void btnDestinations() {
+        Intent i = new Intent(this, RecommendationsActivity.class);
+        startActivity(i);
     }
 
 
@@ -29,29 +77,6 @@ public class MainActivity extends AppCompatActivity implements DisplaysFragment.
 
         initViews();
         initListeners();
-
-        setUpViewPager(mainViewPager);
-    }
-
-    public void setUpViewPager (ViewPager viewPager) {
-        MainPageAdapter mainPageAdapter = new MainPageAdapter(getSupportFragmentManager());
-
-
-        mainPageAdapter.AddFragmentPage(new ProfileFragment());
-        mainPageAdapter.AddFragmentPage(new DisplaysFragment());
-        mainPageAdapter.AddFragmentPage(new DisplaysFragment());
-
-
-        viewPager.setAdapter(mainPageAdapter);
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
 }
