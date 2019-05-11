@@ -1,4 +1,4 @@
-package com.etilk.travel.whereto;
+package com.etilk.travel.whereto.adapters;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,8 +7,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.swagger.client.model.LocationDTO;
 
 public class MainPageAdapter extends FragmentPagerAdapter {
 

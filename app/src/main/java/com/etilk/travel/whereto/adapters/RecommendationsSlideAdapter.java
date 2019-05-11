@@ -1,4 +1,4 @@
-package com.etilk.travel.whereto;
+package com.etilk.travel.whereto.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,21 +11,22 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.etilk.travel.whereto.R;
+
 import java.util.List;
 
 import io.swagger.client.model.LocationDTO;
-import io.swagger.client.model.UserDTO;
 
-public class FriendsIconsAdapter extends PagerAdapter {
+public class RecommendationsSlideAdapter extends PagerAdapter {
 
-    List<UserDTO> userDTOS;
+    List<LocationDTO> locationDTOS;
 
     Context context;
     LayoutInflater layoutInflater;
 
-    public FriendsIconsAdapter(Context context, List<UserDTO> userDTOS) {
+    public RecommendationsSlideAdapter(Context context, List<LocationDTO> locationDTOS) {
         this.context = context;
-        this.userDTOS = userDTOS;
+        this.locationDTOS = locationDTOS;
     }
 
     @Override
@@ -40,9 +41,13 @@ public class FriendsIconsAdapter extends PagerAdapter {
         layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.layout_location, container, false);
 
-        UserDTO UserDTO = userDTOS.get(position);
+        LocationDTO locationDTO = locationDTOS.get(position);
 
         ImageView destinationImageView = view.findViewById(R.id.destinationImageView);
+        Button btnNext = view.findViewById(R.id.btnNext);
+        TextView imageDescriptionView = view.findViewById(R.id.imageDescriptionView);
+
+        imageDescriptionView.setText(locationDTO.getName());
 
         return view;
     }

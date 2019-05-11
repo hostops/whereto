@@ -1,17 +1,14 @@
 package com.etilk.travel.whereto;
 
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 
-import com.etilk.travel.whereto.Fragments.DisplaysFragment;
-import com.etilk.travel.whereto.Fragments.ProfileFragment;
-import com.etilk.travel.whereto.Fragments.RecomendationsFragment;
+import com.etilk.travel.whereto.adapters.MainPageAdapter;
+import com.etilk.travel.whereto.fragments.DisplaysFragment;
+import com.etilk.travel.whereto.fragments.ProfileFragment;
+import com.etilk.travel.whereto.fragments.RecomendationsFragment;
 
 public class MainActivity extends AppCompatActivity implements DisplaysFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener, RecomendationsFragment.OnFragmentInteractionListener {
 
